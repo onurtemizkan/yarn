@@ -143,16 +143,13 @@ test('should inherit existing environment variables when setting via yarnrc', as
   expect(stdout).toMatch(/^FOO$/m);
 });
 
-test('should not show any error messages when script ends successfully', async () => {
-  await expect(execCommand('test', 'script-success')).resolves.toBeDefined();
-});
+test('should not show any error messages when script ends successfully', () =>
+  expect(execCommand('test', 'script-success')).resolves.toBeDefined());
 
-test('should throw error when the script ends with an exit code', async () => {
-  await expect(execCommand('test', 'script-fail')).rejects.toBeDefined();
-});
+test('should throw error when the script ends with an exit code', () =>
+  expect(execCommand('test', 'script-fail')).rejects.toBeDefined());
 
 if (process.platform === 'darwin') {
-  test('should throw error when the script ends with an exit signal', async () => {
-    await expect(execCommand('test', 'script-segfault')).rejects.toBeDefined();
-  });
+  test('should throw error when the script ends with an exit signal', () =>
+    expect(execCommand('test', 'script-segfault')).rejects.toBeDefined());
 }
