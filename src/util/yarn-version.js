@@ -4,6 +4,7 @@
  */
 
 import {readJson} from './fs';
+import * as constants from '../constants';
 
 import fs from 'fs';
 import path from 'path';
@@ -38,3 +39,48 @@ export async function getInstallationMethod(): Promise<InstallationMethod> {
 }
 
 export type InstallationMethod = 'tar' | 'homebrew' | 'deb' | 'rpm' | 'msi' | 'chocolatey' | 'apk' | 'npm' | 'unknown';
+
+/**
+ * Try and detect the installation method for Yarn and provide a command to update it with.
+ */
+
+export function getUpdateCommand(installationMethod: InstallationMethod): ?string {
+  if (installationMethod === 'tar') {
+    return `curl -o- -L ${constants.YARN_INSTALLER_SH} | bash`;
+  }
+
+  if (installationMethod === 'homebrew') {
+    return 'brew upgrade yarn';
+  }
+
+  if (installationMethod === 'deb') {
+    return 'sudo apt-get update && sudo apt-get install yarn';
+  }
+
+  if (installationMethod === 'rpm') {
+    return 'sudo yum install yarn';
+  }
+
+  if (installationMethod === 'npm') {
+    return 'npm install --global yarn';
+  }
+
+  if (installationMethod === 'chocolatey') {
+    return 'choco upgrade yarn';
+  }
+
+  if (installationMethod === 'apk') {
+    return 'apk update && apk add -u yarn';
+  }
+
+  return null;
+}
+
+export function getUpdateInstaller(installationMethod: InstallationMethod): ?string {
+  // Windows
+  if (installationMethod === 'msi') {
+    return constants.YARN_INSTALLER_MSI;
+  }
+
+  return null;
+}

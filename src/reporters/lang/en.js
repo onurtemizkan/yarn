@@ -128,6 +128,8 @@ const messages = {
   yarnOutdated: "Your current version of Yarn is out of date. The latest version is $0 while you're on $1.",
   yarnOutdatedInstaller: 'To upgrade, download the latest installer at $0.',
   yarnOutdatedCommand: 'To upgrade, run the following command:',
+  yarnInvalidVersion: 'Yarn version is invalid.',
+  yarnUpToDate: 'Yarn is up to date.',
 
   tooManyArguments: 'Too many arguments, maximum of $0.',
   tooFewArguments: 'Not enough arguments, expected at least $0.',

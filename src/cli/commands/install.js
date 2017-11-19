@@ -24,7 +24,12 @@ import * as constants from '../../constants.js';
 import {normalizePattern} from '../../util/normalize-pattern.js';
 import * as fs from '../../util/fs.js';
 import map from '../../util/map.js';
-import {version as YARN_VERSION, getInstallationMethod} from '../../util/yarn-version.js';
+import {
+  version as YARN_VERSION,
+  getInstallationMethod,
+  getUpdateCommand,
+  getUpdateInstaller,
+} from '../../util/yarn-version.js';
 import WorkspaceLayout from '../../workspace-layout.js';
 import ResolutionMap from '../../resolution-map.js';
 
@@ -75,51 +80,6 @@ type Flags = {
   // remove, upgrade
   workspaceRootIsCwd: boolean,
 };
-
-/**
- * Try and detect the installation method for Yarn and provide a command to update it with.
- */
-
-function getUpdateCommand(installationMethod: InstallationMethod): ?string {
-  if (installationMethod === 'tar') {
-    return `curl -o- -L ${constants.YARN_INSTALLER_SH} | bash`;
-  }
-
-  if (installationMethod === 'homebrew') {
-    return 'brew upgrade yarn';
-  }
-
-  if (installationMethod === 'deb') {
-    return 'sudo apt-get update && sudo apt-get install yarn';
-  }
-
-  if (installationMethod === 'rpm') {
-    return 'sudo yum install yarn';
-  }
-
-  if (installationMethod === 'npm') {
-    return 'npm install --global yarn';
-  }
-
-  if (installationMethod === 'chocolatey') {
-    return 'choco upgrade yarn';
-  }
-
-  if (installationMethod === 'apk') {
-    return 'apk update && apk add -u yarn';
-  }
-
-  return null;
-}
-
-function getUpdateInstaller(installationMethod: InstallationMethod): ?string {
-  // Windows
-  if (installationMethod === 'msi') {
-    return constants.YARN_INSTALLER_MSI;
-  }
-
-  return null;
-}
 
 function normalizeFlags(config: Config, rawFlags: Object): Flags {
   const flags = {
